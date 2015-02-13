@@ -1,0 +1,29 @@
+{
+  "name": "socket-signaler-client",
+  "version": "0.1.0",
+  "homepage": "https://github.com/mcmouse/socketio-signaler",
+  "authors": [
+    "Tom Lagier <tom@thomaslagier.me>"
+  ],
+  "description": "Client for SocketIO WebRTC streaming webcam chatrooms",
+  "main": "dist/signaler-client.js",
+  "keywords": [
+    "socket.io",
+    "webrtc",
+    "webcam",
+    "streaming",
+    "peerconnection"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "socket.io-client": "~1.3.3",
+    "eventEmitter": "~4.2.11"
+  },
+}

@@ -1,14 +1,18 @@
 /* globals define, module, require */
+/** 
+ * Socket Signaler Client
+ * Version: 0.0.1
+ * GitHub: https://github.com/mcmouse/socketio-signaler-client
+ **/
 
-//UMD definition from https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
   'use strict';
   if (typeof define === 'function' && define.amd) {
-    define(['EventEmitter', 'io'], function (EventEmitter, io) {
+    define(['https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/4.2.11/EventEmitter.min.js', 'https://cdn.socket.io/socket.io-1.3.3.js'], function (EventEmitter, io) {
       return factory(window, EventEmitter, io);
     });
   } else if (typeof exports === 'object') {
-    module.exports = factory(window, require('events').EventEmitter, require('socket.io-client'));
+    module.exports = factory(window, require('wolfy87-eventemitter'), require('socket.io-client'));
   } else {
     root.SignallerPeerConnection = factory(window, root.EventEmitter, root.io);
   }
@@ -17,21 +21,40 @@
 
   function SignallerPeerConnection(options) {
 
+    //Generate our option defaults
+    this.generateDefaults = function (options) {
+      options = options || {};
+      options.server = options.server || 'http://' + window.location.host + '/';
+      options.room = options.room || 'default';
+      options.debug = options.debug || false;
+      return options;
+    };
+
     this.peerConnections = [];
+
+    if (navigator.mozGetUserMedia) {
+      //Set constraints to properly negotiate connection
+      this.constraints = {
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true
+      };
+    } else {
+      //Set constraints to properly negotiate connection
+      this.constraints = {
+        mandatory: {
+          OfferToReceiveAudio: true,
+          OfferToReceiveVideo: true
+        },
+      };
+    }
 
     //Declare our public STUN server
     this.iceServers = {
-      iceServers: [{
-        url: 'stun:stun.l.google.com:19302'
+      'iceServers': [{
+        'url': 'stun:stun.services.mozilla.com'
+      }, {
+        'url': 'stun:stun.l.google.com:19302'
       }]
-    };
-
-    //Set constraints to properly negotiate connection
-    this.constraints = {
-      mandatory: {
-        OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true,
-      }
     };
 
     //Set up our prefixed defaults
@@ -47,15 +70,6 @@
 
       //RTCIceCandidate
       this.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate;
-    };
-
-    //Generate our option defaults
-    this.generateDefaults = function (options) {
-      options = options || {};
-      options.server = options.server || 'http://' + window.location.host + '/';
-      options.room = options.room || 'default';
-      options.debug = options.debug || false;
-      return options;
     };
 
     //Set up our event handlers
@@ -118,13 +132,20 @@
       if (options.debug) console.log('Binding connection events for peer: ' + peer.id);
 
       //Send ice candidate to peer
-      peer.connection.onicecandidate = function (candidate) {
+      peer.connection.onicecandidate = function (event) {
         if (options.debug && options.debug === 'verbose') console.log('Sending ICE candidate to ' + peer.id);
+        if (options.debug && options.debug === 'verbose') console.log('Full event ', event);
+        if (options.debug && options.debug === 'verbose') console.log('Stringified event ', JSON.stringify(event));
 
-        this.socket.emit('icecandidate', {
-          target: peer.id,
-          candidate: candidate
-        });
+        console.log(Object.keys(event));
+
+        if (event.candidate) {
+          this.socket.emit('icecandidate', {
+            target: peer.id,
+            candidate: event.candidate
+          });
+        }
+
 
       }.bind(this);
 
@@ -144,6 +165,21 @@
       peer.connection.ondatachannel = function (event) {
         if (options.debug) console.log('Data channel added from ' + peer.id);
         this.emit('dataChannelAdded', event.channel, peer.id);
+      }.bind(this);
+
+      //Don't add unnecessary ICE candidates.
+      //On Ice error, close the connection
+      peer.connection.oniceconnectionstatechange = function () {
+        switch (peer.connection.iceConnectionState) {
+        case 'disconnected':
+        case 'failed':
+          this.logError('iceConnectionState is disconnected, closing connections to ' + peer.id);
+          peer.connection.close();
+          break;
+        case 'completed':
+          peer.connection.onicecandidate = function () {};
+          break;
+        }
       }.bind(this);
 
       return peer;
@@ -231,7 +267,7 @@
 
     //Event fired when our peer is connected
     this.peerConnected = function (id) {
-      this.emit('peerconnected', id);
+      this.emit('peerConnected', id);
       if (options.debug) console.log('Signaling with peer: ' + id);
     };
 
@@ -384,13 +420,15 @@
     //Process ice candidate
     this.receiveIceCandidate = function (data) {
 
+      if (options.debug && options.debug === 'verbose') console.log('Received candidate', data.candidate);
+
       //This is horrible, but that's the way the data is packaged
-      if (data && data.candidate && data.candidate.candidate && data.candidate.candidate.candidate) {
+      if (data.candidate.candidate) {
 
         //Unpackage data
         var peer = this.getPeer(data.sender),
-          candidate = data.candidate.candidate.candidate,
-          line = data.candidate.candidate.sdpMLineIndex;
+          candidate = data.candidate.candidate,
+          line = data.candidate.sdpMLineIndex;
 
         if (options.debug && options.debug === 'verbose') console.log('Added ICE candidate from ' + peer.id);
 
