@@ -20,77 +20,94 @@ You can grab the minified file from the `dist` folder, or install the whole pack
 
 ###Installation
 
-  //Install package with Bower
-  bower install --save socket-signaler-client
+````
+//Install package with Bower
+bower install --save socket-signaler-client
 
-  //Install package with NPM
-  npm install --save socket-signaler-client
+//Install package with NPM
+npm install --save socket-signaler-client
+````
 
 ####Pure JavaScript
-  //Include dependencies
-  <script src="https://cdn.socket.io/socket.io-1.3.3.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/4.2.11/EventEmitter.min.js"></script>
 
-  //Include client
-  <script src="libs/signaler-client.min.js"></script>
+````
+//Include dependencies
+<script src="https://cdn.socket.io/socket.io-1.3.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/4.2.11/EventEmitter.min.js"></script>
+
+//Include client
+<script src="libs/signaler-client.min.js"></script>
+````
 
 ####CommonJS (Browserify)
-  //Include constructor
-  //Dependencies are packaged
-  var PeerConnectionClient = require('socket-signaler-client');
+
+````
+//Include constructor
+//Dependencies are packaged
+var PeerConnectionClient = require('socket-signaler-client');
+````
 
 ####AMD (RequireJS)
-  //Add path to module to your Require config
-  //Dependencies are loaded from CDN
-  require.config({
-    ...
-    paths: {
-      ...
-      PeerConnectionClient: 'libs/signaler-client',
-    },
-  });
 
-  //Pass module into any modules where it is used
-  require(['PeerConnectionClient'], function (PeerConnectionClient) {
-    //Constructor available here
-  }
+````
+//Add path to module to your Require config
+//Dependencies are loaded from CDN
+require.config({
+  ...
+  paths: {
+    ...
+    PeerConnectionClient: 'libs/signaler-client',
+  },
+});
+
+//Pass module into any modules where it is used
+require(['PeerConnectionClient'], function (PeerConnectionClient) {
+  //Constructor available here
+}
+````
 
 ###Intitialization
-  var pc = new PeerConnectionClient(options);
-  //Can use pc to bind to connection lifecycle events here
+
+````
+var pc = new PeerConnectionClient(options);
+//Can use pc to bind to connection lifecycle events here
+````
 
 ###Simple webcam call
-  pc.on('localStreamAdded', function (stream) {
-    var local = $('#local')[0];
-    local.src = URL.createObjectURL(stream);
-  });
 
-  pc.on('remoteStreamAdded', function (stream, peer) {
-    var element = videoTemplate.clone();
-    element.attr({
-      'class': peer,
-      'src': URL.createObjectURL(stream)
-    });
-    $('#remotes').append(element);
-  });
+````
+pc.on('localStreamAdded', function (stream) {
+  var local = $('#local')[0];
+  local.src = URL.createObjectURL(stream);
+});
 
-  pc.on('localStreamRemoved', function () {
-    var local = $('#local')[0];
-    local.src = '';
+pc.on('remoteStreamAdded', function (stream, peer) {
+  var element = videoTemplate.clone();
+  element.attr({
+    'class': peer,
+    'src': URL.createObjectURL(stream)
   });
+  $('#remotes').append(element);
+});
 
-  pc.on('remoteStreamRemoved', function (peer) {
-    var remote = $('.' + peer);
-    remote.remove();
-  });
+pc.on('localStreamRemoved', function () {
+  var local = $('#local')[0];
+  local.src = '';
+});
 
-  $('#show').on('click', function () {
-    spc.addLocalStream();
-  });
+pc.on('remoteStreamRemoved', function (peer) {
+  var remote = $('.' + peer);
+  remote.remove();
+});
 
-  $('#hide').on('click', function () {
-    spc.removeLocalStream();
-  });
+$('#show').on('click', function () {
+  spc.addLocalStream();
+});
+
+$('#hide').on('click', function () {
+  spc.removeLocalStream();
+});
+````
 
 ##Options
 
