@@ -1,5 +1,4 @@
 #Socket.IO Signaler Client
----
 
 This package is intended to be used as the client component of the [Socket.IO Signaler](https://github.com/mcmouse/socketio-signaler) package. It was written in order to interface with a websockets based signaling server and wrap the WebRTC negotiation and GetUserMedia process, offering up a sensible event API.
 
@@ -12,7 +11,6 @@ For robust, actively-maintained WebRTC helper libraries, I recommend [peer.js](h
 The Signaler Client is only compatible with recent versions of browsers that have implemented WebRTC - Chrome, Firefox, and Opera at time of writing.
 
 ##Getting Started
----
 
 The Socket.IO Signaler Client is compatible with vanilla JavaScript and Bower as well as AMD-style ([RequireJS](http://requirejs.org/)) and CommonJS-style ([Browserify](http://browserify.org/)) module systems.
 
@@ -95,7 +93,6 @@ You can grab the minified file from the `dist` folder, or install the whole pack
   });
 
 ##Options
----
 
 These options can be passed in to the PeerConnectionClient constructor
 
@@ -109,7 +106,6 @@ Default: `default`
 Default: `false`
 
 ##API
----
 
 ###Events
 
@@ -136,7 +132,6 @@ Triggered when a peer has disconnected. Can be used to keep track of which users
 ... Coming soon: DataChannels!
 
 ###Methods
----
 
 The PeerConnectionClient exposes many methods for interacting with peers connected to the WebSockets room.
 
@@ -150,7 +145,6 @@ Removes the local stream from all PeerConnections and revoke microphone and vide
 Disconnects a peer with the given ID, closing and removing the PeerConnection. If the connection had a MediaStream, it will also close and remove the stream.
 
 ###License
----
 
 Copyright (c) 2015 Tom Lagier <tom@thomaslagier.me>
 
