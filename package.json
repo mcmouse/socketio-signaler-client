@@ -1,6 +1,6 @@
 {
   "name": "socket-signaler-client",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Client for SocketIO WebRTC streaming webcam chatrooms",
   "main": "dist/signaler-client.js",
   "scripts": {
