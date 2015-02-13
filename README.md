@@ -113,13 +113,19 @@ $('#hide').on('click', function () {
 
 These options can be passed in to the PeerConnectionClient constructor
 
-`server` - Where the signaling WebSockets server is located.
+`server`
+
+Where the signaling WebSockets server is located.
 Default: Current host root. So if you run the PeerConnectionClient from `http://localhost:3000/`, the PeerConnectionClient will try to connect to the WS server there.
 
-`room` - The room that will be the context for connecting to peers. Your client will connect to all other clients in this room.
+`room`
+
+The room that will be the context for connecting to peers. Your client will connect to all other clients in this room.
 Default: `default`
 
-`debug` - Whether to console log negotiation events. Acceptable values are `false`, `true`, or `"verbose"`, which will log full ICE connections.
+`debug`
+
+Whether to console log negotiation events. Acceptable values are `false`, `true`, or `"verbose"`, which will log full ICE connections.
 Default: `false`
 
 ##API
@@ -129,21 +135,27 @@ Default: `false`
 The PeerConnectionClient is an EventEmitter, meaning that you can use `on()`, `emit()`, and `trigger()` to listen to and fire events. There are several default events used to listen to the negotiation cycle, as well as many signaling events used to communicate with the signaling server.
 
 `.on('localStreamAdded', function(stream){})`
+
 Triggered when the local user has successfully added a stream to their local PeerConnections. Called with the [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) object that was captured. This object can be added to `<video>` elements.
 
 `.on('remoteStreamAdded', function(stream, peer){})`
+
 Triggered when a peer has successfully added a stream to their PeerConnection. Called with the [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) object that was captured and the peer's unique ID.
 
 `.on('localStreamRemoved', function(){})`
+
 Triggered when the local stream has been removed.
 
 `.on('remoteStreamRemoved', function(peer){})`
+
 Triggered when a remote stream has been removed. Called with the peer's unique ID.
 
 `.on('peerConnected', function(peer){})`
+
 Triggered when a peer has established and negotiated a PeerConnection. Can be used to add DataChannels, or just keep a list of users. Called with the peer's unique ID.
 
 `.on('peerDisconnected', function(peer){})`
+
 Triggered when a peer has disconnected. Can be used to keep track of which users are currently conected. Called with the peer's unique ID.
 
 ... Coming soon: DataChannels!
@@ -153,12 +165,15 @@ Triggered when a peer has disconnected. Can be used to keep track of which users
 The PeerConnectionClient exposes many methods for interacting with peers connected to the WebSockets room.
 
 `addLocalStream(options)`
+
 Calls [GetUserMedia](https://developer.mozilla.org/en-US/docs/NavigatorUserMedia.getUserMedia) to capture the browser's webcam and microphone. Passes through all standard GetUserMedia options, so can be used to capture just audio or video if necessary. Will trigger a user prompt asking for permission to access webcam and microphone.
 
 `removeLocalStream()`
+
 Removes the local stream from all PeerConnections and revoke microphone and video access.
 
 `disconnectConnection(id)`
+
 Disconnects a peer with the given ID, closing and removing the PeerConnection. If the connection had a MediaStream, it will also close and remove the stream.
 
 ###License
