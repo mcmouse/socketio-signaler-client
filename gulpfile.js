@@ -14,7 +14,6 @@ function logError(error) {
 
 var config = {
   inputFile: './src/signaler-client.js',
-  inputFiles: './libs/*.js',
   minFile: 'signaler-client.min.js',
   pkgdFile: 'signaler-client.pkgd.js',
   pkgdMinFile: 'signaler-client.pkgd.min.js',
@@ -22,7 +21,7 @@ var config = {
 };
 
 gulp.task('dev', [], function () {
-  gulp.src(config.inputFiles)
+  gulp.src(config.inputFile)
     .pipe(gulp.dest(config.dest));
 });
 

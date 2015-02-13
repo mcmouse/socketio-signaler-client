@@ -14,21 +14,12 @@
   } else if (typeof exports === 'object') {
     module.exports = factory(window, require('wolfy87-eventemitter'), require('socket.io-client'));
   } else {
-    root.SignallerPeerConnection = factory(window, root.EventEmitter, root.io);
+    root.PeerConnectionClient = factory(window, root.EventEmitter, root.io);
   }
 }(this, function factory(window, EventEmitter, io) {
   'use strict';
 
-  function SignallerPeerConnection(options) {
-
-    //Generate our option defaults
-    this.generateDefaults = function (options) {
-      options = options || {};
-      options.server = options.server || 'http://' + window.location.host + '/';
-      options.room = options.room || 'default';
-      options.debug = options.debug || false;
-      return options;
-    };
+  function PeerConnectionClient(options) {
 
     this.peerConnections = [];
 
@@ -70,6 +61,15 @@
 
       //RTCIceCandidate
       this.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate;
+    };
+
+    //Generate our option defaults
+    this.generateDefaults = function (options) {
+      options = options || {};
+      options.server = options.server || 'http://' + window.location.host + '/';
+      options.room = options.room || 'default';
+      options.debug = options.debug || false;
+      return options;
     };
 
     //Set up our event handlers
@@ -267,7 +267,7 @@
 
     //Event fired when our peer is connected
     this.peerConnected = function (id) {
-      this.emit('peerConnected', id);
+      this.emit('peerconnected', id);
       if (options.debug) console.log('Signaling with peer: ' + id);
     };
 
@@ -453,7 +453,7 @@
     this.bindEvents();
   }
 
-  SignallerPeerConnection.prototype = new EventEmitter();
+  PeerConnectionClient.prototype = new EventEmitter();
 
-  return SignallerPeerConnection;
+  return PeerConnectionClient;
 }));
