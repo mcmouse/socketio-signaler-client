@@ -1,4 +1,4 @@
-#Socket.IO Signaler Client
+# Socket.IO Signaler Client
 
 This package is intended to be used as the client component of the [Socket.IO Signaler](https://github.com/mcmouse/socketio-signaler) package. It was written in order to interface with a websockets based signaling server and wrap the WebRTC negotiation and GetUserMedia process, offering up a sensible event API.
 
@@ -10,7 +10,7 @@ For robust, actively-maintained WebRTC helper libraries, I recommend [peer.js](h
 
 The Signaler Client is only compatible with recent versions of browsers that have implemented WebRTC - Chrome, Firefox, and Opera at time of writing.
 
-##Getting Started
+## Getting Started
 
 The Socket.IO Signaler Client is compatible with vanilla JavaScript and Bower as well as AMD-style ([RequireJS](http://requirejs.org/)) and CommonJS-style ([Browserify](http://browserify.org/)) module systems.
 
@@ -18,7 +18,7 @@ It is dependent on the [Socket.IO](http://socket.io/) client library and the exc
 
 You can grab the minified file from the `dist` folder, or install the whole package with `Bower` or `NPM`. You should only use the packaged file if you are using Browserify or another CommonJS module loader:
 
-###Installation
+### Installation
 
 ````
 //Install package with Bower
@@ -28,7 +28,7 @@ bower install --save socket-signaler-client
 npm install --save socket-signaler-client
 ````
 
-####Pure JavaScript
+#### Pure JavaScript
 
 ````
 //Include dependencies
@@ -39,7 +39,7 @@ npm install --save socket-signaler-client
 <script src="libs/signaler-client.min.js"></script>
 ````
 
-####CommonJS (Browserify)
+#### CommonJS (Browserify)
 
 ````
 //Include constructor
@@ -47,7 +47,7 @@ npm install --save socket-signaler-client
 var PeerConnectionClient = require('socket-signaler-client');
 ````
 
-####AMD (RequireJS)
+#### AMD (RequireJS)
 
 ````
 //Add path to module to your Require config
@@ -66,14 +66,14 @@ require(['PeerConnectionClient'], function (PeerConnectionClient) {
 }
 ````
 
-###Intitialization
+### Intitialization
 
 ````
 var pc = new PeerConnectionClient(options);
 //Can use pc to bind to connection lifecycle events here
 ````
 
-###Simple webcam call
+### Simple webcam call
 
 ````
 pc.on('localStreamAdded', function (stream) {
@@ -109,7 +109,7 @@ $('#hide').on('click', function () {
 });
 ````
 
-##Options
+## Options
 
 These options can be passed in to the PeerConnectionClient constructor
 
@@ -128,9 +128,9 @@ Default: `default`
 Whether to console log negotiation events. Acceptable values are `false`, `true`, or `"verbose"`, which will log full ICE connections.
 Default: `false`
 
-##API
+## API
 
-###Events
+### Events
 
 The PeerConnectionClient is an EventEmitter, meaning that you can use `on()`, `emit()`, and `trigger()` to listen to and fire events. There are several default events used to listen to the negotiation cycle, as well as many signaling events used to communicate with the signaling server.
 
@@ -160,7 +160,7 @@ Triggered when a peer has disconnected. Can be used to keep track of which users
 
 ... Coming soon: DataChannels!
 
-###Methods
+### Methods
 
 The PeerConnectionClient exposes many methods for interacting with peers connected to the WebSockets room.
 
@@ -176,7 +176,7 @@ Removes the local stream from all PeerConnections and revoke microphone and vide
 
 Disconnects a peer with the given ID, closing and removing the PeerConnection. If the connection had a MediaStream, it will also close and remove the stream.
 
-###License
+### License
 
 Copyright (c) 2015 Tom Lagier <tom@thomaslagier.me>
 
